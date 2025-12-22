@@ -6,7 +6,7 @@ const cors = require("cors");
 const multer = require("multer");
 
 const getImageAnalysis = require("./image-analysis");
-const getIngredientRecognition = require("./ingredient-recognition");
+const getIngredientRecognition = require("./image-editor");
 const getImageCreator = require("./image-creator");
 
 dotenv.config();

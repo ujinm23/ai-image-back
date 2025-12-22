@@ -3,7 +3,7 @@ const client = require("../huggingface-inference");
 const getImageCreator = async (req, res) => {
   try {
     const { input } = req.body;
-    // console.log("req", req.body);
+   
     console.log("");
     if (!input) {
       return res.status(400).json({ error: "Missing input" });
@@ -18,10 +18,10 @@ const getImageCreator = async (req, res) => {
     const arrayBuffer = await image.arrayBuffer();
     const base64 = Buffer.from(arrayBuffer).toString("base64");
 
-    // Create data URL
+    
     const dataUrl = `data:image/png;base64,${base64}`;
 
-    // Send URL to front-end
+    
     res.json({ result: dataUrl });
     console.log("image", dataUrl);
   } catch (err) {
