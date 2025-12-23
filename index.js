@@ -6,8 +6,8 @@ const cors = require("cors");
 const multer = require("multer");
 
 const getImageAnalysis = require("./image-analysis");
-const getIngredientRecognition = require("./image-editor");
 const getImageCreator = require("./image-creator");
+const getImageEditor = require("./image-editor");
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/analyze-image", upload.single("image"), getImageAnalysis);
-app.post("/ingredient-recognition", getIngredientRecognition);
+app.post("/image-editor", getImageEditor);
 app.post("/image-create", getImageCreator);
 
 app.listen(PORT, () => {

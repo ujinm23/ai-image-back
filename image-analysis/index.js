@@ -5,6 +5,8 @@ const getImageAnalysis = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
+    console.log(" Image uploaded");
+    console.log("Analysing image ");
 
     const base64Image = req.file.buffer.toString("base64");
 
@@ -29,10 +31,12 @@ const getImageAnalysis = async (req, res) => {
         },
       ],
     });
+     
 
     res.json({
       description: result.choices[0].message.content,
     });
+    console.log("Done!");
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Image analysis failed", err });
