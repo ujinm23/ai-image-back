@@ -24,7 +24,7 @@ const getImageCreator = async (req, res) => {
 
     res.json({ result: dataUrl });
 
-    // console.log("image", dataUrl);
+  
     console.log("Done!");
   } catch (err) {
     console.error(err);

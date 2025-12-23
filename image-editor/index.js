@@ -2,40 +2,45 @@ const client = require("../huggingface-inference");
 
 const getImageEditor = async (req, res) => {
   try {
-    console.log(" Received image edit request");
+    console.log("Received image edit request");
 
-    const input = req.body.prompt;
     if (!req.file) {
-      console.log(" No image uploaded");
       return res.status(400).json({ error: "No image uploaded" });
     }
-    console.log("Prompt:", input);
-    const base64Image = req.file.buffer.toString("base64");
-    console.log(" Sending image to AI for editing...");
+
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ error: "Missing prompt" });
+    }
+
+    console.log("Prompt:", prompt);
+    console.log("Image received, preparing image blob...");
+
+    const imageBlob = new Blob([req.file.buffer], {
+      type: req.file.mimetype,
+    });
+
+    console.log("Sending image to AI for editing...");
 
     const image = await client.imageToImage({
       provider: "wavespeed",
       model: "Qwen/Qwen-Image-Edit-2509",
-      inputs: {
-        type: "image_url",
-        image_url: {
-          url: `data:${req.file.mimetype};base64,${base64Image}`,
-        },
+      inputs: imageBlob, 
+      parameters: {
+        prompt,
       },
-      parameters: { prompt: input },
     });
-    console.log("AI edited image, converting to Base64");
 
     const arrayBuffer = await image.arrayBuffer();
     const base64 = Buffer.from(arrayBuffer).toString("base64");
     const dataUrl = `data:image/png;base64,${base64}`;
 
-    console.log(" Sending edited image back to frontend");
+    console.log("Image editing finished ");
 
     res.json({ result: dataUrl });
   } catch (err) {
     console.error("Image editing failed:", err);
-    res.status(500).json({ error: "Image analysis failed", err });
+    res.status(500).json({ error: "Image editing failed" });
   }
 };
 

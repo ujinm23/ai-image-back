@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/analyze-image", upload.single("image"), getImageAnalysis);
-app.post("/image-editor", getImageEditor);
+app.post("/image-editor",upload.single("image"), getImageEditor);
 app.post("/image-create", getImageCreator);
 
 app.listen(PORT, () => {
