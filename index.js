@@ -8,6 +8,7 @@ const multer = require("multer");
 const getImageAnalysis = require("./image-analysis");
 const getImageCreator = require("./image-creator");
 const getImageEditor = require("./image-editor");
+const getChat = require("./chat");
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.post("/analyze-image", upload.single("image"), getImageAnalysis);
 app.post("/image-editor",upload.single("image"), getImageEditor);
 app.post("/image-create", getImageCreator);
+app.post("/chat", getChat);
 
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
