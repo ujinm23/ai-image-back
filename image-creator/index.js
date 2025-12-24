@@ -27,9 +27,16 @@ const getImageCreator = async (req, res) => {
   
     console.log("Done!");
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Image creation failed" });
-  }
+  console.error(err);
+
+  const message =
+    err?.httpResponse?.status === 402
+      ? "Image generation limit reached. Please try again later."
+      : "Image creation failed.";
+
+  res.status(402).json({ error: message });
+}
+
 };
 
 module.exports = getImageCreator;

@@ -31,15 +31,20 @@ const getImageAnalysis = async (req, res) => {
         },
       ],
     });
-     
 
     res.json({
       description: result.choices[0].message.content,
     });
     console.log("Done!");
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Image analysis failed", err });
+    console.error("Image analysis failed:", err);
+
+    const message =
+      err?.httpResponse?.status === 402
+        ? "Image analysis limit reached. Please try again later."
+        : "Image analysis failed.";
+
+    res.status(err?.httpResponse?.status || 500).json({ error: message });
   }
 };
 

@@ -25,7 +25,7 @@ const getImageEditor = async (req, res) => {
     const image = await client.imageToImage({
       provider: "wavespeed",
       model: "Qwen/Qwen-Image-Edit-2509",
-      inputs: imageBlob, 
+      inputs: imageBlob,
       parameters: {
         prompt,
       },
@@ -40,7 +40,13 @@ const getImageEditor = async (req, res) => {
     res.json({ result: dataUrl });
   } catch (err) {
     console.error("Image editing failed:", err);
-    res.status(500).json({ error: "Image editing failed" });
+
+    const message =
+      err?.httpResponse?.status === 402
+        ? "Image editing limit reached. Please try again later."
+        : "Image editing failed.";
+
+    res.status(err?.httpResponse?.status || 500).json({ error: message });
   }
 };
 
